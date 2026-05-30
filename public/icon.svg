@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#0F0F0F"/>
+  <!-- Outer orbit ring (dashed) -->
+  <circle cx="256" cy="256" r="180" stroke="#E50914" stroke-width="18"
+    stroke-dasharray="56 28" stroke-linecap="round" fill="none"/>
+  <!-- Inner red circle -->
+  <circle cx="256" cy="256" r="130" fill="#E50914"/>
+  <!-- Play triangle (white) -->
+  <polygon points="210,196 210,316 348,256" fill="#fff"/>
+  <!-- Gold spark (graduation) top-right -->
+  <line x1="374" y1="118" x2="394" y2="98" stroke="#ffd700" stroke-width="12" stroke-linecap="round"/>
+  <line x1="394" y1="128" x2="414" y2="108" stroke="#ffd700" stroke-width="12" stroke-linecap="round"/>
+  <line x1="374" y1="128" x2="404" y2="128" stroke="#ffd700" stroke-width="12" stroke-linecap="round"/>
+  <!-- Film dot bottom-left -->
+  <circle cx="120" cy="380" r="18" fill="rgba(255,255,255,.35)"/>
+  <circle cx="158" cy="412" r="13" fill="rgba(255,255,255,.2)"/>
+</svg>

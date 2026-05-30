@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0F0F0F"/>
+  <rect x="0" y="0" width="1200" height="4" fill="#E50914"/>
+  <!-- Background pattern -->
+  <circle cx="900" cy="315" r="280" fill="rgba(229,9,20,.05)"/>
+  <circle cx="900" cy="315" r="200" fill="rgba(229,9,20,.05)"/>
+  <!-- Logo mark -->
+  <circle cx="160" cy="240" r="60" fill="#E50914"/>
+  <polygon points="148,218 148,262 192,240" fill="white"/>
+  <!-- Wordmark -->
+  <text x="248" y="264" fill="#E5E5E5" font-size="80" font-weight="900" font-family="Arial,sans-serif" letter-spacing="-3">Flonex</text>
+  <text x="648" y="264" fill="#E50914" font-size="80" font-weight="900" font-family="Arial,sans-serif" letter-spacing="-3">TV</text>
+  <!-- Tagline -->
+  <text x="156" y="310" fill="rgba(255,255,255,.45)" font-size="28" font-family="Arial,sans-serif" letter-spacing="4">STREAM · LEARN · ENJOY</text>
+  <!-- Description -->
+  <text x="156" y="390" fill="rgba(255,255,255,.7)" font-size="32" font-family="Arial,sans-serif">Free Movies · Certified Courses · Comedy Shorts</text>
+  <text x="156" y="440" fill="rgba(255,255,255,.5)" font-size="26" font-family="Arial,sans-serif">Nollywood · Bollywood · Hollywood · Korean Cinema</text>
+  <!-- Trust badge -->
+  <rect x="156" y="480" width="340" height="44" rx="22" fill="rgba(22,163,74,.15)" stroke="rgba(22,163,74,.3)" stroke-width="1.5"/>
+  <text x="246" y="508" fill="#22c55e" font-size="20" font-weight="700" font-family="Arial,sans-serif">100% Legal · No Subscription</text>
+  <!-- URL -->
+  <text x="156" y="570" fill="rgba(255,255,255,.3)" font-size="22" font-family="Arial,sans-serif">flonextv.vercel.app</text>
+  <!-- Bottom accent -->
+  <rect x="0" y="626" width="1200" height="4" fill="#E50914"/>
+</svg>
