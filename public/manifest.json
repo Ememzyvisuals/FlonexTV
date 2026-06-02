@@ -1,11 +1,29 @@
 {
-  "name": "FlonexTV",
+  "name": "FlonexTV — Free Streaming & Learning",
   "short_name": "FlonexTV",
-  "description": "Free legal streaming — public domain films, Yoruba movies, Christian movies, YouTube Shorts.",
+  "description": "Nigeria's free legal streaming and learning platform. Watch Nollywood, Bollywood & Korean movies. Comedy shorts. Free AI-certified courses.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0F0F0F",
-  "theme_color": "#0F0F0F",
-  "orientation": "any",
-  "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+  "theme_color": "#E50914",
+  "orientation": "portrait-primary",
+  "categories": ["entertainment", "education"],
+  "lang": "en-NG",
+  "scope": "/",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ],
+  "screenshots": [
+    {
+      "src": "/og-image.jpg",
+      "sizes": "1500x600",
+      "type": "image/jpeg",
+      "label": "FlonexTV — Stream Learn Enjoy"
+    }
+  ],
+  "shortcuts": [
+    { "name": "Watch Movies", "url": "/#movies",  "description": "Browse free movies" },
+    { "name": "Shorts",       "url": "/#shorts",  "description": "Comedy shorts" },
+    { "name": "Courses",      "url": "/#courses", "description": "Free certified courses" }
+  ]
 }

@@ -1,100 +1,271 @@
 import type { Metadata, Viewport } from "next";
 
-const BASE_URL = "https://flonextv.vercel.app";
+/* ================================================================
+   FlonexTV — Full Production SEO Layout
+   OG image: /og-image.jpg (1500×600 banner)
+   Canonical: https://flonextv.vercel.app
+   Structured data: Organization + WebSite + SearchAction
+   ================================================================ */
+
+const BASE = "https://flonextv.vercel.app";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(BASE_URL),
+  metadataBase: new URL(BASE),
+
+  /* ── Core ── */
   title: {
-    default:  "FlonexTV — Free Legal Streaming, Courses & Comedy Shorts",
+    default:  "FlonexTV — Free Streaming, Courses & Comedy Shorts | Nigeria",
     template: "%s | FlonexTV",
   },
   description:
-    "FlonexTV is a free global streaming platform. Watch Nollywood, Bollywood, Hollywood & Korean movies, take certified free courses, and enjoy comedy shorts from Nigeria's best creators. 100% legal, no subscription.",
+    "FlonexTV is Nigeria's free legal streaming and learning platform. Watch Nollywood, Bollywood, Hollywood & Korean movies, enjoy ad-free comedy shorts from Mark Angel, Broda Shaggi & Taaooma, and earn verifiable AI-certified courses — 100% free, no subscription.",
+
   keywords: [
-    "FlonexTV","flonex tv","free streaming platform","Nollywood movies free",
-    "Nigerian movies YouTube","free online courses Nigeria","comedy shorts Nigeria",
-    "Broda Shaggi","Mark Angel Comedy","Yoruba movies free","Christian movies Nigeria",
-    "free certified courses","streaming learning platform","watch movies free Nigeria",
-    "Bollywood movies free YouTube","Korean movies YouTube free",
+    "FlonexTV", "flonex tv", "flonextv streaming", "free streaming Nigeria",
+    "Nollywood movies free", "Nigerian movies online free", "watch Nollywood free",
+    "free online courses Nigeria", "free certified courses Nigeria",
+    "Nigerian comedy shorts", "comedy shorts Nigeria", "Mark Angel comedy",
+    "Broda Shaggi videos", "Taaooma videos", "WoliAgba shorts",
+    "Yoruba movies free", "Christian movies Nigeria", "Mount Zion films free",
+    "Bollywood movies free YouTube", "Korean movies free online",
+    "Hollywood movies free legal", "free AI certificate course",
+    "learn web development Nigeria free", "free streaming platform Africa",
+    "Nigerian streaming app", "Nollywood streaming", "African movies free",
+    "free education Nigeria", "AI exam certificate", "EMEMZYVISUALS",
   ],
-  authors:   [{ name:"Emmanuel Ariyo", url:"https://github.com/Ememzyvisuals" }],
-  creator:   "Emmanuel Ariyo — EMEMZYVISUALS",
+
+  authors:   [{ name: "Emmanuel Ariyo", url: "https://github.com/Ememzyvisuals" }],
+  creator:   "Emmanuel Ariyo — EMEMZYVISUALS DIGITALS",
   publisher: "FlonexTV",
-  robots:    { index:true, follow:true, googleBot:{ index:true, follow:true, "max-image-preview":"large" } },
-  alternates: { canonical: BASE_URL },
+  generator: "Next.js",
+  referrer:  "origin-when-cross-origin",
+
+  /* ── Canonical + alternates ── */
+  alternates: {
+    canonical: BASE,
+    languages: {
+      "en-NG": BASE,
+      "en-GB": BASE,
+      "en-US": BASE,
+    },
+  },
+
+  /* ── Robots ── */
+  robots: {
+    index:               true,
+    follow:              true,
+    nocache:             false,
+    googleBot: {
+      index:             true,
+      follow:            true,
+      noimageindex:      false,
+      "max-image-preview":  "large",
+      "max-snippet":        -1,
+      "max-video-preview":  -1,
+    },
+  },
+
+  /* ── Open Graph ── */
   openGraph: {
     type:        "website",
-    url:          BASE_URL,
-    title:       "FlonexTV — Free Legal Streaming, Courses & Comedy Shorts",
-    description: "Watch Nollywood, Bollywood, Hollywood & Korean movies free. Take certified courses. Enjoy comedy shorts from Nigeria's best creators.",
+    url:          BASE,
     siteName:    "FlonexTV",
-    images: [{
-      url:`${BASE_URL}/og-image.svg`, width:1200, height:630,
-      alt:"FlonexTV — Stream · Learn · Enjoy",
-    }],
-    locale: "en_US",
+    title:       "FlonexTV — Free Streaming, Courses & Comedy Shorts | Nigeria",
+    description: "Watch Nollywood, Bollywood & Korean movies free. Comedy shorts with zero ads. Free AI-certified courses. 100% legal. No subscription.",
+    locale:      "en_NG",
+    alternateLocale: ["en_US", "en_GB"],
+    images: [
+      {
+        url:    `${BASE}/og-image.jpg`,
+        width:  1500,
+        height: 600,
+        alt:    "FlonexTV — Stream · Learn · Enjoy | Nigeria's Free Streaming Platform",
+        type:   "image/jpeg",
+      },
+    ],
   },
+
+  /* ── Twitter / X ── */
   twitter: {
     card:        "summary_large_image",
     site:        "@ememzyvisuals",
     creator:     "@ememzyvisuals",
-    title:       "FlonexTV — Free Legal Streaming & Learning Platform",
-    description: "Free movies, certified courses, comedy shorts — all in one platform. 100% legal.",
-    images:      [`${BASE_URL}/og-image.svg`],
+    title:       "FlonexTV — Free Streaming & Learning Platform | Nigeria",
+    description: "Nollywood, Bollywood, Korean films. Ad-free comedy shorts. Free AI-certified courses. 100% legal, no subscription.",
+    images:      [`${BASE}/og-image.jpg`],
   },
+
+  /* ── Icons / PWA ── */
   icons: {
-    icon:     [{ url:"/icon.svg", type:"image/svg+xml" }],
-    apple:    "/icon.svg",
-    shortcut: "/icon.svg",
+    icon:     [{ url: "/icon.svg", type: "image/svg+xml" }],
+    apple:    [{ url: "/icon.svg", sizes: "any" }],
+    shortcut:  "/icon.svg",
   },
-  manifest:    "/manifest.json",
-  category:    "entertainment",
+  manifest: "/manifest.json",
+
+  /* ── Category ── */
+  category:       "Entertainment & Education",
+  classification: "Free Streaming and Learning Platform",
+
+  /* ── Verification (add after Search Console setup) ── */
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION ?? "",
+    // yandex: "your-yandex-token",
+    // bing:   "your-bing-token",
+  },
+
+  /* ── App metadata ── */
+  appleWebApp: {
+    capable:        true,
+    title:          "FlonexTV",
+    statusBarStyle: "black-translucent",
+  },
+  formatDetection: { telephone: false },
+
+  /* ── Other ── */
+  other: {
+    "theme-color":           "#E50914",
+    "msapplication-TileColor": "#E50914",
+    "rating":                "general",
+    "revisit-after":         "3 days",
+    "language":              "English",
+    "geo.region":            "NG",
+    "geo.country":           "Nigeria",
+  },
 };
 
 export const viewport: Viewport = {
-  width:        "device-width",
-  initialScale: 1,
-  maximumScale: 1,
-  themeColor:   "#E50914",
-  colorScheme:  "dark",
+  width:              "device-width",
+  initialScale:       1,
+  maximumScale:       5,
+  themeColor:         [
+    { media: "(prefers-color-scheme: dark)",  color: "#E50914" },
+    { media: "(prefers-color-scheme: light)", color: "#E50914" },
+  ],
+  colorScheme: "dark",
 };
 
-const structuredData = {
-  "@context":"https://schema.org",
-  "@graph":[
+/* ── JSON-LD Structured Data ── */
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
     {
-      "@type":"Organization","@id":`${BASE_URL}/#organization`,
-      name:"FlonexTV", url:BASE_URL,
-      logo:{"@type":"ImageObject",url:`${BASE_URL}/icon.svg`},
-      sameAs:["https://github.com/Ememzyvisuals/FlonexTV","https://x.com/ememzyvisuals"],
-      description:"Free global streaming and learning platform.",
+      "@type":  "Organization",
+      "@id":    `${BASE}/#organization`,
+      name:     "FlonexTV",
+      url:       BASE,
+      logo: {
+        "@type":       "ImageObject",
+        "@id":         `${BASE}/#logo`,
+        url:           `${BASE}/icon.svg`,
+        width:         512,
+        height:        512,
+        caption:       "FlonexTV Logo",
+      },
+      image:        { "@id": `${BASE}/#logo` },
+      description:  "Nigeria's free legal streaming and learning platform. Nollywood, Bollywood, Hollywood & Korean movies. Ad-free comedy shorts. Free AI-certified courses.",
+      sameAs: [
+        "https://github.com/Ememzyvisuals/flonextv",
+        "https://twitter.com/ememzyvisuals",
+        "https://x.com/ememzyvisuals",
+      ],
+      foundingDate:  "2026",
+      founder: {
+        "@type": "Person",
+        name:    "Emmanuel Ariyo",
+        url:     "https://github.com/Ememzyvisuals",
+      },
+      areaServed:    "Nigeria",
+      knowsAbout:    ["Streaming", "E-Learning", "Nollywood", "Nigerian Content"],
     },
     {
-      "@type":"WebSite","@id":`${BASE_URL}/#website`,
-      url:BASE_URL, name:"FlonexTV",
-      publisher:{"@id":`${BASE_URL}/#organization`},
-      potentialAction:{
-        "@type":"SearchAction",
-        target:{"@type":"EntryPoint",urlTemplate:`${BASE_URL}/?q={search_term_string}`},
-        "query-input":"required name=search_term_string",
+      "@type":    "WebSite",
+      "@id":      `${BASE}/#website`,
+      url:         BASE,
+      name:        "FlonexTV",
+      description: "Free streaming and learning platform for Nigeria and Africa",
+      publisher:   { "@id": `${BASE}/#organization` },
+      inLanguage:  ["en-NG", "yo", "ha", "ig", "fr", "hi", "ko", "ja"],
+      potentialAction: [
+        {
+          "@type":       "SearchAction",
+          target: {
+            "@type":     "EntryPoint",
+            urlTemplate: `${BASE}/?q={search_term_string}`,
+          },
+          "query-input": "required name=search_term_string",
+        },
+      ],
+    },
+    {
+      "@type":     "WebPage",
+      "@id":       `${BASE}/#webpage`,
+      url:          BASE,
+      name:         "FlonexTV — Free Streaming, Courses & Comedy Shorts",
+      description:  "Watch free movies, comedy shorts, and earn AI-certified course certificates on FlonexTV.",
+      isPartOf:    { "@id": `${BASE}/#website` },
+      about:       { "@id": `${BASE}/#organization` },
+      primaryImageOfPage: {
+        "@type": "ImageObject",
+        url:     `${BASE}/og-image.jpg`,
+        width:   1500,
+        height:  600,
       },
+      breadcrumb: {
+        "@type":           "BreadcrumbList",
+        itemListElement:   [
+          { "@type": "ListItem", position: 1, name: "Home", item: BASE },
+        ],
+      },
+    },
+    {
+      "@type":        "VideoObject",
+      name:           "FlonexTV Platform Overview",
+      description:    "Free streaming and learning platform for Nigeria. Watch movies, shorts, earn certificates.",
+      thumbnailUrl:   `${BASE}/og-image.jpg`,
+      uploadDate:     "2026-04-01",
+      publisher:      { "@id": `${BASE}/#organization` },
+    },
+    {
+      "@type":   "ItemList",
+      name:      "FlonexTV Features",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Free Nollywood & Bollywood Movies", url: BASE },
+        { "@type": "ListItem", position: 2, name: "Ad-Free Nigerian Comedy Shorts",    url: BASE },
+        { "@type": "ListItem", position: 3, name: "Free AI-Certified Courses",         url: BASE },
+        { "@type": "ListItem", position: 4, name: "Verifiable Digital Certificates",   url: BASE },
+      ],
     },
   ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en-NG" dir="ltr">
       <head>
+        {/* Preconnect for performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous"/>
-        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
         <link rel="preconnect" href="https://api.themoviedb.org"/>
         <link rel="preconnect" href="https://image.tmdb.org"/>
+        <link rel="preconnect" href="https://www.youtube-nocookie.com"/>
+
+        {/* Fonts */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap"
+          rel="stylesheet"
+        />
+
+        {/* HLS.js for Archive.org streams */}
         <script src="https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js" async/>
-        <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(structuredData)}}/>
+
+        {/* JSON-LD Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </head>
-      <body style={{margin:0,background:"#0F0F0F",fontFamily:"'Nunito',sans-serif"}}>
+      <body style={{ margin: 0, background: "#0F0F0F", fontFamily: "'Nunito', sans-serif" }}>
         {children}
       </body>
     </html>

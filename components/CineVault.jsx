@@ -3124,7 +3124,6 @@ function PracticalTask({ course, user, onPass, onClose }) {
   );
 }
 
-<<<<<<< HEAD
 /* ─── CERTIFICATE PAGE ──────────────────────────────────────── */
 /*
  * Full-screen professional certificate with:
@@ -3371,8 +3370,6 @@ function CertificatePage({ certData, onBack }) {
   );
 }
 
-=======
->>>>>>> d1d949346b167d192924695a88ec51caa28d4d54
 /* ─── AI EXAM ─────────────────────────────────────────────────── */
 function AIExam({course, user, onPass, onFail, onClose}) {
   const [phase,     setPhase]     = useState("intro");   // intro|loading|exam|grading|result
