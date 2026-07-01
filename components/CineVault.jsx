@@ -3135,237 +3135,358 @@ function PracticalTask({ course, user, onPass, onClose }) {
 function CertificatePage({ certData, onBack }) {
   const {
     courseTitle = "Course Completed",
-    userName    = "FlonexTV Graduate",
-    certId      = "FTV-" + Date.now().toString(36).toUpperCase(),
-    issuedAt    = new Date().toISOString(),
+    userName:   rawName = "",
+    certId:     rawId   = null,
+    issuedAt            = new Date().toISOString(),
   } = certData || {};
+
+  // ── Name prompt ── ask user for real name before showing cert
+  const [displayName, setDisplayName] = useState(rawName || "");
+  const [nameConfirmed, setNameConfirmed] = useState(!!rawName && rawName.trim().length > 2);
+  const [nameInput, setNameInput]         = useState(rawName || "");
+
+  // ── Generate stable cert ID ───────────────────────────────
+  const certId = rawId || (
+    "FTV-" +
+    new Date(issuedAt).getFullYear() + "-" +
+    Math.random().toString(36).slice(2,8).toUpperCase()
+  );
 
   const dateStr = new Date(issuedAt).toLocaleDateString("en-GB", {
     day:"numeric", month:"long", year:"numeric",
   });
 
-  function downloadPDF() {
-    // Open print dialog — user saves as PDF from browser
-    // We inject a print-optimised style then trigger window.print()
-    const style = document.createElement("style");
-    style.id = "cert-print-style";
-    style.innerHTML = `
-      @media print {
-        body > * { display: none !important; }
-        #flx-cert-printable { display: block !important; position: fixed; inset: 0; z-index: 99999; }
-      }
-    `;
-    document.head.appendChild(style);
-    window.print();
-    setTimeout(() => document.getElementById("cert-print-style")?.remove(), 2000);
+  // ── PNG download via html2canvas loaded from CDN ──────────
+  function downloadPNG() {
+    const el = document.getElementById("flx-cert-card");
+    if (!el) return;
+    // If html2canvas is already loaded
+    if (window.html2canvas) {
+      window.html2canvas(el, { scale:2, useCORS:true, backgroundColor:"#0a0a0a" })
+        .then(canvas => {
+          const a = document.createElement("a");
+          a.href    = canvas.toDataURL("image/png");
+          a.download = `FlonexTV-Certificate-${certId}.png`;
+          a.click();
+        });
+      return;
+    }
+    // Load html2canvas from CDN then run
+    const script = document.createElement("script");
+    script.src = "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
+    script.onload = () => {
+      window.html2canvas(el, { scale:2, useCORS:true, backgroundColor:"#0a0a0a" })
+        .then(canvas => {
+          const a = document.createElement("a");
+          a.href    = canvas.toDataURL("image/png");
+          a.download = `FlonexTV-Certificate-${certId}.png`;
+          a.click();
+        });
+    };
+    document.head.appendChild(script);
   }
 
-  const certEl = (
-    <div id="flx-cert-printable" style={{
-      width:"100%", maxWidth:760, margin:"0 auto",
-      background:"#0a0800",
-      border:"1px solid rgba(255,215,0,.25)",
-      borderRadius:16, overflow:"hidden",
-      boxShadow:"0 0 60px rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,215,0,.08)",
-    }}>
-      {/* Gold top bar */}
-      <div style={{height:5, background:"linear-gradient(90deg,#b8860b,#ffd700,#b8860b)"}}/>
+  // ── Social share ─────────────────────────────────────────
+  const shareText = `🏆 I just earned the "${courseTitle}" certificate on @FlonexTV Academy!\n\nCompleted all modules, passed an AI exam, and submitted a practical task.\nCertificate ID: ${certId}\n\nFree learning platform for Nigeria 🇳🇬\n👉 flonextv.vercel.app\n\n#FlonexTV #FreeEducation #Nigeria #Certified`;
 
-      {/* Inner frame */}
-      <div style={{margin:24, border:"1px solid rgba(255,215,0,.15)", borderRadius:10, padding:"32px 36px"}}>
+  function shareX()       { window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`, "_blank"); }
+  function shareLinkedIn(){ window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent("https://flonextv.vercel.app")}&summary=${encodeURIComponent(shareText)}`, "_blank"); }
+  function copyPost()     { navigator.clipboard?.writeText(shareText).catch(()=>{}); }
 
-        {/* FlonexTV header */}
-        <div style={{display:"flex", alignItems:"center", justifyContent:"center", gap:12, marginBottom:24}}>
-          <div style={{width:44, height:44, borderRadius:"50%", background:"#E50914",
-            display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0}}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-              <polygon points="6,4 6,20 20,12" fill="white"/>
-            </svg>
-          </div>
-          <div>
-            <p style={{fontWeight:900, fontSize:22, letterSpacing:"-.02em", margin:0}}>
-              Flonex<span style={{color:"#E50914"}}>TV</span>
-            </p>
-            <p style={{fontSize:11, fontWeight:700, color:"rgba(255,215,0,.5)",
-              letterSpacing:".12em", textTransform:"uppercase", margin:0}}>Academy</p>
-          </div>
+  // ── Name prompt screen ───────────────────────────────────
+  if (!nameConfirmed) {
+    return (
+      <div style={{background:"var(--bg)",minHeight:"100%",display:"flex",flexDirection:"column"}}>
+        <div style={{display:"flex",alignItems:"center",gap:10,padding:"10px 14px",
+          position:"sticky",top:0,background:"rgba(15,15,15,.97)",borderBottom:"1px solid var(--line)",zIndex:50}}>
+          <button className="tap" onClick={onBack}
+            style={{width:36,height:36,borderRadius:"50%",background:"var(--bg3)",
+              display:"flex",alignItems:"center",justifyContent:"center"}}>
+            <Icon name="back" size={17} color="#fff"/>
+          </button>
+          <p style={{fontWeight:900,fontSize:16}}>Your Certificate</p>
         </div>
-
-        {/* Divider */}
-        <div style={{height:1, background:"linear-gradient(90deg,transparent,rgba(255,215,0,.3),transparent)", marginBottom:28}}/>
-
-        {/* Certificate of Completion */}
-        <p style={{textAlign:"center", fontSize:13, fontWeight:700, letterSpacing:".16em",
-          textTransform:"uppercase", color:"rgba(255,215,0,.55)", marginBottom:8}}>
-          Certificate of Completion
-        </p>
-
-        <p style={{textAlign:"center", fontSize:12, fontWeight:600, color:"rgba(255,255,255,.4)",
-          marginBottom:20}}>This is to certify that</p>
-
-        {/* Name */}
-        <div style={{textAlign:"center", marginBottom:20}}>
-          <p style={{fontSize:32, fontWeight:900, letterSpacing:"-.02em",
-            color:"#FFD700", margin:0, lineHeight:1.1}}>
-            {userName}
+        <div style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",
+          justifyContent:"center",padding:"32px 24px",textAlign:"center"}}>
+          <div style={{fontSize:52,marginBottom:16}}>🎓</div>
+          <p style={{fontWeight:900,fontSize:22,marginBottom:8}}>
+            One Last Step
           </p>
-          <div style={{height:2, background:"linear-gradient(90deg,transparent,rgba(255,215,0,.4),transparent)",
-            marginTop:10, maxWidth:300, margin:"10px auto 0"}}/>
-        </div>
-
-        <p style={{textAlign:"center", fontSize:12, fontWeight:600, color:"rgba(255,255,255,.4)",
-          marginBottom:12}}>has successfully completed</p>
-
-        {/* Course title */}
-        <div style={{background:"rgba(229,9,20,.08)", border:"1px solid rgba(229,9,20,.18)",
-          borderRadius:10, padding:"14px 20px", textAlign:"center", marginBottom:24}}>
-          <p style={{fontWeight:900, fontSize:20, color:"#fff", margin:0, lineHeight:1.3}}>
-            {courseTitle}
+          <p style={{fontSize:13,fontWeight:600,color:"rgba(255,255,255,.5)",
+            lineHeight:1.7,marginBottom:28,maxWidth:300}}>
+            Enter your real name exactly as you want it to appear on your certificate.
           </p>
-          <p style={{fontSize:11, fontWeight:700, color:"rgba(255,255,255,.4)",
-            marginTop:6, margin:"6px 0 0"}}>
-            including all modules, AI-generated exam, and practical task review
-          </p>
-        </div>
-
-        {/* Trophy */}
-        <div style={{textAlign:"center", marginBottom:24}}>
-          <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
-            <rect x="20" y="52" width="24" height="5" rx="2" fill="rgba(255,215,0,.4)"/>
-            <rect x="26" y="46" width="12" height="8" rx="2" fill="rgba(255,215,0,.5)"/>
-            <path d="M12 8h40v20a20 20 0 01-40 0V8z" fill="none" stroke="#FFD700" strokeWidth="2.5"/>
-            <path d="M12 12H4v8a10 10 0 008 9.8M52 12h8v8a10 10 0 01-8 9.8" stroke="rgba(255,215,0,.4)" strokeWidth="2" strokeLinecap="round"/>
-            <polygon points="32,16 34.5,23 42,23 36,27.5 38.5,34.5 32,30 25.5,34.5 28,27.5 22,23 29.5,23" fill="#FFD700" opacity=".9"/>
-          </svg>
-        </div>
-
-        {/* Issued date + cert ID */}
-        <div style={{display:"flex", justifyContent:"space-between", alignItems:"flex-end",
-          marginBottom:24, flexWrap:"wrap", gap:12}}>
-          <div>
-            <p style={{fontSize:10, fontWeight:700, color:"rgba(255,215,0,.4)",
-              textTransform:"uppercase", letterSpacing:".1em", marginBottom:3}}>Date Issued</p>
-            <p style={{fontWeight:800, fontSize:14, color:"rgba(255,255,255,.7)"}}>{dateStr}</p>
+          <div style={{width:"100%",maxWidth:340}}>
+            <input
+              type="text"
+              value={nameInput}
+              onChange={e=>setNameInput(e.target.value)}
+              placeholder="e.g. Emmanuel Ariyo"
+              style={{
+                width:"100%",background:"var(--bg2)",border:"1px solid var(--line)",
+                borderRadius:10,padding:"14px 16px",color:"var(--text)",
+                fontSize:16,fontWeight:700,fontFamily:"inherit",
+                boxSizing:"border-box",outline:"none",marginBottom:12,
+              }}
+              onFocus={e=>e.target.style.borderColor="var(--red)"}
+              onBlur={e=>e.target.style.borderColor="var(--line)"}
+            />
+            <button className="pbtn r tap"
+              style={{width:"100%",justifyContent:"center",padding:"13px 0",fontSize:15}}
+              onClick={()=>{
+                if(nameInput.trim().length<2) return;
+                setDisplayName(nameInput.trim());
+                setNameConfirmed(true);
+              }}>
+              Generate My Certificate →
+            </button>
           </div>
-          <div style={{textAlign:"right"}}>
-            <p style={{fontSize:10, fontWeight:700, color:"rgba(255,215,0,.4)",
-              textTransform:"uppercase", letterSpacing:".1em", marginBottom:3}}>Certificate ID</p>
-            <p style={{fontWeight:800, fontSize:12, color:"rgba(255,255,255,.5)",
-              fontFamily:"monospace"}}>{certId}</p>
-          </div>
-        </div>
-
-        {/* Signature row */}
-        <div style={{height:1, background:"linear-gradient(90deg,transparent,rgba(255,215,0,.2),transparent)", marginBottom:16}}/>
-        <div style={{display:"flex", justifyContent:"space-between", alignItems:"center"}}>
-          <div>
-            <div style={{height:1, width:140, background:"rgba(255,255,255,.2)", marginBottom:6}}/>
-            <p style={{fontSize:11, fontWeight:700, color:"rgba(255,255,255,.45)"}}>Emmanuel Ariyo</p>
-            <p style={{fontSize:10, fontWeight:600, color:"rgba(255,215,0,.4)"}}>Director, FlonexTV Academy</p>
-          </div>
-          {/* Star seal */}
-          <div style={{width:60, height:60, position:"relative", display:"flex",
-            alignItems:"center", justifyContent:"center"}}>
-            <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
-              <circle cx="30" cy="30" r="28" stroke="rgba(255,215,0,.3)" strokeWidth="1.5" strokeDasharray="3 2"/>
-              <circle cx="30" cy="30" r="22" stroke="rgba(255,215,0,.2)" strokeWidth="1"/>
-              <polygon points="30,10 33.5,21 45,21 36,28 39.5,39 30,32 20.5,39 24,28 15,21 26.5,21"
-                fill="rgba(255,215,0,.6)"/>
-            </svg>
-          </div>
-          <div style={{textAlign:"right"}}>
-            <div style={{height:1, width:140, background:"rgba(255,255,255,.2)", marginBottom:6, marginLeft:"auto"}}/>
-            <p style={{fontSize:11, fontWeight:700, color:"rgba(255,255,255,.45)"}}>FlonexTV Platform</p>
-            <p style={{fontSize:10, fontWeight:600, color:"rgba(255,215,0,.4)"}}>flonextv.vercel.app</p>
-          </div>
-        </div>
-
-        {/* Verification note */}
-        <div style={{marginTop:20, textAlign:"center",
-          background:"rgba(255,255,255,.03)", borderRadius:8, padding:"10px"}}>
-          <p style={{fontSize:10, fontWeight:600, color:"rgba(255,255,255,.3)", margin:0}}>
-            This certificate is authentic and verifiable at flonextv.vercel.app · Certificate ID: {certId}
-          </p>
         </div>
       </div>
+    );
+  }
 
-      {/* Gold bottom bar */}
-      <div style={{height:5, background:"linear-gradient(90deg,#b8860b,#ffd700,#b8860b)"}}/>
-    </div>
-  );
+  // ── Certificate card ─────────────────────────────────────
+  // Styled exactly like the Nomba reference:
+  // Dark bg, thick yellow top/bottom bars, spaced caps header,
+  // large bold gold name, clean minimal layout
 
   return (
-    <div style={{background:"var(--bg)", minHeight:"100%", paddingBottom:40}}>
+    <div style={{background:"#111",minHeight:"100%",paddingBottom:40}}>
 
-      {/* Sticky header */}
-      <div style={{display:"flex", alignItems:"center", gap:10, padding:"10px 14px",
-        position:"sticky", top:0, background:"rgba(15,15,15,.97)",
-        borderBottom:"1px solid var(--line)", zIndex:50}}>
+      {/* Header */}
+      <div style={{display:"flex",alignItems:"center",gap:10,padding:"10px 14px",
+        position:"sticky",top:0,background:"rgba(10,10,10,.97)",
+        borderBottom:"1px solid #222",zIndex:50}}>
         <button className="tap" onClick={onBack}
-          style={{width:36, height:36, borderRadius:"50%", background:"var(--bg3)",
-            display:"flex", alignItems:"center", justifyContent:"center"}}>
+          style={{width:36,height:36,borderRadius:"50%",background:"#222",
+            display:"flex",alignItems:"center",justifyContent:"center"}}>
           <Icon name="back" size={17} color="#fff"/>
         </button>
         <div style={{flex:1}}>
-          <p style={{fontWeight:900, fontSize:16}}>Your Certificate</p>
-          <p style={{fontSize:11, fontWeight:600, color:"var(--t3)"}}>
-            {courseTitle}
-          </p>
+          <p style={{fontWeight:900,fontSize:16}}>Your Certificate</p>
+          <p style={{fontSize:11,fontWeight:600,color:"#666"}}>{courseTitle}</p>
         </div>
-        {/* Download PDF button */}
-        <button className="pbtn r tap"
-          style={{padding:"8px 16px", fontSize:12}}
-          onClick={downloadPDF}>
+        <button
+          style={{background:"#E50914",border:"none",borderRadius:8,
+            padding:"8px 14px",color:"#fff",fontWeight:800,fontSize:12,
+            cursor:"pointer",display:"flex",alignItems:"center",gap:6}}
+          onClick={downloadPNG}>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-            <path d="M12 3v13M7 11l5 5 5-5M3 20h18"
-              stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M12 3v13M7 11l5 5 5-5M3 20h18" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
-          Save PDF
+          Save PNG
         </button>
       </div>
 
-      {/* Congratulations banner */}
-      <div style={{margin:"16px 16px 0", background:"rgba(34,197,94,.07)",
-        border:"1px solid rgba(34,197,94,.2)", borderRadius:12, padding:"14px 16px",
-        display:"flex", alignItems:"center", gap:12}}>
-        <span style={{fontSize:28}}>🏆</span>
+      {/* Congratulations */}
+      <div style={{margin:"14px 14px 0",background:"rgba(34,197,94,.07)",
+        border:"1px solid rgba(34,197,94,.18)",borderRadius:10,padding:"12px 14px",
+        display:"flex",alignItems:"center",gap:10}}>
+        <span style={{fontSize:24}}>🏆</span>
         <div>
-          <p style={{fontWeight:900, fontSize:15, marginBottom:2}}>
-            Congratulations, {userName?.split(" ")[0] || "Graduate"}!
+          <p style={{fontWeight:900,fontSize:14,marginBottom:1}}>
+            Congratulations, {displayName.split(" ")[0]}!
           </p>
-          <p style={{fontSize:12, fontWeight:600, color:"rgba(255,255,255,.5)"}}>
-            You completed the course, passed the exam, and submitted a practical task. Well done.
+          <p style={{fontSize:11,fontWeight:600,color:"rgba(255,255,255,.45)"}}>
+            You completed the course, passed the exam, and submitted a practical task.
           </p>
         </div>
       </div>
 
-      {/* Certificate */}
-      <div style={{padding:"20px 14px"}}>
-        {certEl}
+      {/* ── THE CERTIFICATE CARD ── */}
+      <div style={{padding:"14px"}}>
+        <div id="flx-cert-card" style={{
+          background:"#0a0a0a",
+          borderRadius:8,
+          overflow:"hidden",
+          border:"1px solid #222",
+          fontFamily:"'Nunito',Arial,sans-serif",
+        }}>
+          {/* Thick yellow top bar */}
+          <div style={{height:18,background:"#F5C000"}}/>
+
+          {/* Content area */}
+          <div style={{padding:"32px 28px 28px"}}>
+
+            {/* Top row: Logo left | CERTIFICATE OF COMPLETION right */}
+            <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",marginBottom:40}}>
+              {/* Logo */}
+              <div style={{display:"flex",alignItems:"center",gap:8}}>
+                <div style={{width:32,height:32,borderRadius:"50%",background:"#E50914",
+                  display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                    <polygon points="5,3 5,21 19,12" fill="white"/>
+                  </svg>
+                </div>
+                <div>
+                  <p style={{fontWeight:900,fontSize:18,letterSpacing:"-.02em",margin:0,color:"#fff"}}>
+                    Flonex<span style={{color:"#E50914"}}>TV</span>
+                  </p>
+                </div>
+              </div>
+              {/* Top right label */}
+              <p style={{fontSize:10,fontWeight:700,color:"#888",letterSpacing:".15em",
+                textTransform:"uppercase",margin:0,textAlign:"right"}}>
+                CERTIFICATE OF COMPLETION
+              </p>
+            </div>
+
+            {/* Center content */}
+            <div style={{textAlign:"center",marginBottom:36}}>
+              {/* Category label */}
+              <p style={{fontSize:11,fontWeight:800,color:"#888",letterSpacing:".2em",
+                textTransform:"uppercase",marginBottom:10}}>
+                CERTIFIED FLONEXTV GRADUATE
+              </p>
+              <p style={{fontSize:12,fontWeight:600,color:"#666",marginBottom:16}}>
+                This is to certify that
+              </p>
+              {/* Name — large gold bold like Nomba */}
+              <p style={{
+                fontSize:40,fontWeight:900,color:"#F5C000",
+                letterSpacing:"-.02em",lineHeight:1.1,margin:"0 0 20px",
+                wordBreak:"break-word",
+              }}>
+                {displayName}
+              </p>
+              {/* Completion text */}
+              <p style={{fontSize:13,fontWeight:600,color:"#888",marginBottom:6}}>
+                has successfully completed
+              </p>
+              <p style={{fontSize:15,fontWeight:900,color:"#fff",lineHeight:1.4}}>
+                {courseTitle}
+              </p>
+              <p style={{fontSize:11,fontWeight:600,color:"#555",marginTop:6}}>
+                including all modules, AI-generated exam, and practical task review
+              </p>
+            </div>
+
+            {/* Divider */}
+            <div style={{height:1,background:"#222",marginBottom:20}}/>
+
+            {/* Bottom row: Logo | Cert ID + Date | Partner */}
+            <div style={{display:"flex",alignItems:"flex-end",justifyContent:"space-between",gap:8}}>
+              {/* Left: Issuer */}
+              <div>
+                <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:4}}>
+                  <div style={{width:20,height:20,borderRadius:"50%",background:"#E50914",
+                    display:"flex",alignItems:"center",justifyContent:"center"}}>
+                    <svg width="8" height="8" viewBox="0 0 24 24" fill="none">
+                      <polygon points="5,3 5,21 19,12" fill="white"/>
+                    </svg>
+                  </div>
+                  <p style={{fontWeight:900,fontSize:12,color:"#fff",margin:0}}>
+                    Flonex<span style={{color:"#E50914"}}>TV</span>
+                  </p>
+                </div>
+                <p style={{fontSize:9,fontWeight:700,color:"#555",letterSpacing:".12em",
+                  textTransform:"uppercase",margin:0}}>ISSUER</p>
+              </div>
+
+              {/* Center: Cert ID + date */}
+              <div style={{textAlign:"center"}}>
+                <p style={{fontSize:10,fontWeight:700,color:"#666",
+                  fontFamily:"monospace",letterSpacing:".06em",marginBottom:3}}>
+                  {certId}
+                </p>
+                <p style={{fontSize:11,fontWeight:600,color:"#555",margin:0}}>
+                  Issued {dateStr}
+                </p>
+              </div>
+
+              {/* Right: Emmanuel Ariyo as Director */}
+              <div style={{textAlign:"right"}}>
+                <p style={{fontWeight:900,fontSize:12,color:"#fff",margin:"0 0 4px"}}>
+                  <span style={{color:"#F5C000"}}>Dev</span>Career
+                </p>
+                <p style={{fontSize:9,fontWeight:700,color:"#555",letterSpacing:".12em",
+                  textTransform:"uppercase",margin:0}}>PARTNER</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Thick yellow bottom bar */}
+          <div style={{height:18,background:"#F5C000"}}/>
+        </div>
       </div>
 
-      {/* Action buttons */}
-      <div style={{padding:"0 16px 12px", display:"flex", gap:8, flexDirection:"column"}}>
-        <button className="pbtn r tap"
-          style={{width:"100%", justifyContent:"center", padding:"13px 0", fontSize:14}}
-          onClick={downloadPDF}>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
-            <path d="M12 3v13M7 11l5 5 5-5M3 20h18"
-              stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-          Download Certificate as PDF
-        </button>
+      {/* Download hint */}
+      <p style={{textAlign:"center",fontSize:11,fontWeight:600,color:"#555",
+        padding:"0 16px 12px"}}>
+        Tap "Save PNG" to download your certificate as an image
+      </p>
 
-        <p style={{textAlign:"center", fontSize:11, fontWeight:600, color:"rgba(255,255,255,.3)"}}>
-          Tap "Download as PDF" → Your browser opens a print dialog → Choose "Save as PDF"
+      {/* Share section */}
+      <div style={{margin:"0 14px",background:"#161616",border:"1px solid #222",
+        borderRadius:10,padding:"14px 16px",marginBottom:12}}>
+        <p style={{fontWeight:800,fontSize:13,marginBottom:12}}>
+          Share Your Achievement
         </p>
+        <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+          {/* X / Twitter */}
+          <button onClick={shareX}
+            style={{display:"flex",alignItems:"center",gap:6,background:"#000",
+              border:"1px solid #333",borderRadius:8,padding:"9px 14px",
+              color:"#fff",fontWeight:800,fontSize:12,cursor:"pointer"}}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63z"/>
+            </svg>
+            Post on X
+          </button>
+          {/* LinkedIn */}
+          <button onClick={shareLinkedIn}
+            style={{display:"flex",alignItems:"center",gap:6,background:"#0A66C2",
+              border:"none",borderRadius:8,padding:"9px 14px",
+              color:"#fff",fontWeight:800,fontSize:12,cursor:"pointer"}}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
+              <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/>
+              <circle cx="4" cy="4" r="2" fill="white"/>
+            </svg>
+            LinkedIn
+          </button>
+          {/* Copy */}
+          <button onClick={copyPost}
+            style={{display:"flex",alignItems:"center",gap:6,background:"#222",
+              border:"1px solid #333",borderRadius:8,padding:"9px 14px",
+              color:"#fff",fontWeight:800,fontSize:12,cursor:"pointer"}}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+              <rect x="9" y="9" width="13" height="13" rx="2" stroke="white" strokeWidth="2"/>
+              <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" stroke="white" strokeWidth="2"/>
+            </svg>
+            Copy Post
+          </button>
+        </div>
+        {/* Instagram note */}
+        <p style={{fontSize:10,fontWeight:600,color:"#555",marginTop:10}}>
+          For Instagram: tap "Save PNG", then upload the image to your story or feed with the copied caption.
+        </p>
+      </div>
 
-        <button className="pbtn gr tap"
-          style={{width:"100%", justifyContent:"center", padding:"11px 0", fontSize:13}}
-          onClick={onBack}>
-          Back to Courses
+      {/* Cert ID copy */}
+      <div style={{margin:"0 14px 14px",background:"#161616",border:"1px solid #222",
+        borderRadius:8,padding:"10px 14px",display:"flex",alignItems:"center",gap:10}}>
+        <div style={{flex:1}}>
+          <p style={{fontSize:9,fontWeight:700,color:"#555",textTransform:"uppercase",
+            letterSpacing:".1em",marginBottom:2}}>Certificate ID</p>
+          <p style={{fontSize:12,fontWeight:800,fontFamily:"monospace",color:"#F5C000"}}>
+            {certId}
+          </p>
+        </div>
+        <button onClick={()=>navigator.clipboard?.writeText(certId)}
+          style={{background:"#222",border:"1px solid #333",borderRadius:6,
+            padding:"6px 10px",color:"#888",fontWeight:700,fontSize:11,cursor:"pointer"}}>
+          Copy ID
         </button>
       </div>
+
+      <button className="tap"
+        style={{display:"block",margin:"0 14px",width:"calc(100% - 28px)",
+          background:"#1a1a1a",border:"1px solid #222",borderRadius:8,
+          padding:"12px 0",color:"#888",fontWeight:800,fontSize:13,cursor:"pointer"}}
+        onClick={onBack}>
+        Back to Courses
+      </button>
     </div>
   );
 }

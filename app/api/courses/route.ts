@@ -218,7 +218,90 @@ const STATIC_COURSES = [
       { id:"cc6", position:6, title:"Growing & Monetising",          youtube_id:"WlGLX5lKAcc", duration_min:11 },
     ],
   },
+
+  {
+    id: "course-ai-ml", slug: "ai-machine-learning",
+    title: "AI & Machine Learning Basics",
+    description: "Learn the fundamentals of Artificial Intelligence and Machine Learning. Understand how AI works, build your first ML model, and learn to use tools like Python, scikit-learn, and modern AI APIs.",
+    category: "technology",
+    thumbnail: "https://img.youtube.com/vi/GwIo3gDZCVQ/maxresdefault.jpg",
+    duration_min: 110, total_modules: 7, is_free: true,
+    modules: [
+      { id:"ai1", position:1, title:"What is AI & Machine Learning?",       youtube_id:"GwIo3gDZCVQ", duration_min:16 },
+      { id:"ai2", position:2, title:"Python for Data Science",               youtube_id:"rfscVS0vtbw", duration_min:18 },
+      { id:"ai3", position:3, title:"Data & Datasets Explained",             youtube_id:"zeat3VGDfc0", duration_min:14 },
+      { id:"ai4", position:4, title:"Training Your First ML Model",          youtube_id:"i_LwzRVP7bg", duration_min:17 },
+      { id:"ai5", position:5, title:"Neural Networks Simplified",            youtube_id:"aircAruvnKk", duration_min:16 },
+      { id:"ai6", position:6, title:"Using OpenAI & Groq APIs",              youtube_id:"1bUy-1hGZpI", duration_min:15 },
+      { id:"ai7", position:7, title:"Build an AI Chatbot with Python",       youtube_id:"pJSITl_KBQY", duration_min:14 },
+    ],
+  },
+  {
+    id: "course-data-science", slug: "data-science-beginners",
+    title: "Data Science for Beginners",
+    description: "Understand how to collect, clean, analyse and visualise data. Learn pandas, numpy, and matplotlib to turn raw data into meaningful insights. Perfect for beginners with no prior experience.",
+    category: "technology",
+    thumbnail: "https://img.youtube.com/vi/ua-CiDNNj30/maxresdefault.jpg",
+    duration_min: 95, total_modules: 6, is_free: true,
+    modules: [
+      { id:"ds1", position:1, title:"What is Data Science?",                 youtube_id:"ua-CiDNNj30", duration_min:14 },
+      { id:"ds2", position:2, title:"Python & Jupyter Notebooks",            youtube_id:"7eh4d9ejbtY", duration_min:16 },
+      { id:"ds3", position:3, title:"Data Cleaning with Pandas",             youtube_id:"bDhvCp3_lYw", duration_min:18 },
+      { id:"ds4", position:4, title:"Data Visualisation with Matplotlib",    youtube_id:"DAQNHzOcO5A", duration_min:16 },
+      { id:"ds5", position:5, title:"Statistics for Data Science",           youtube_id:"xxpc-HPKN28", duration_min:16 },
+      { id:"ds6", position:6, title:"Your First Data Analysis Project",      youtube_id:"r-uOLxNrNk8", duration_min:15 },
+    ],
+  },
+  {
+    id: "course-prompt-engineering", slug: "prompt-engineering",
+    title: "Prompt Engineering & AI Tools",
+    description: "Master the skill of writing effective prompts for ChatGPT, Claude, Midjourney and other AI tools. Learn prompt patterns, chain-of-thought reasoning, and how to build AI-powered workflows.",
+    category: "technology",
+    thumbnail: "https://img.youtube.com/vi/1bUy-1hGZpI/maxresdefault.jpg",
+    duration_min: 70, total_modules: 5, is_free: true,
+    modules: [
+      { id:"pe1", position:1, title:"Introduction to Prompt Engineering",    youtube_id:"1bUy-1hGZpI", duration_min:13 },
+      { id:"pe2", position:2, title:"Writing Effective Prompts",             youtube_id:"pJSITl_KBQY", duration_min:15 },
+      { id:"pe3", position:3, title:"Chain-of-Thought & Few-Shot Prompting", youtube_id:"sRSAMCMQDCI", duration_min:14 },
+      { id:"pe4", position:4, title:"AI Image Generation Prompts",           youtube_id:"oi3TUbGlh5s", duration_min:13 },
+      { id:"pe5", position:5, title:"Building AI Workflows & Automations",   youtube_id:"ZNqB65E8YMI", duration_min:15 },
+    ],
+  },
+  {
+    id: "course-freelancing", slug: "freelancing-nigeria",
+    title: "Freelancing & Remote Work",
+    description: "Learn how to get clients, price your services, and build a sustainable freelance career. Covers Upwork, Fiverr, LinkedIn outreach, proposals, contracts, and getting paid internationally.",
+    category: "business",
+    thumbnail: "https://img.youtube.com/vi/oBrNpDmjZXo/maxresdefault.jpg",
+    duration_min: 80, total_modules: 6, is_free: true,
+    modules: [
+      { id:"fl1", position:1, title:"Starting Your Freelance Career",        youtube_id:"oBrNpDmjZXo", duration_min:13 },
+      { id:"fl2", position:2, title:"Setting Up Upwork & Fiverr Profile",    youtube_id:"DlF5yOhNLdg", duration_min:14 },
+      { id:"fl3", position:3, title:"Writing Winning Proposals",             youtube_id:"F3P_kSJCFBg", duration_min:13 },
+      { id:"fl4", position:4, title:"Pricing Your Services",                 youtube_id:"Qhy1H4CuJjk", duration_min:12 },
+      { id:"fl5", position:5, title:"Getting Paid — Payoneer, Wise & Paystack",youtube_id:"5k_GnEPKrks", duration_min:13 },
+      { id:"fl6", position:6, title:"Scaling to $1000/month",                youtube_id:"J4e5OKqMKHk", duration_min:15 },
+    ],
+  },
+  {
+    id: "course-video-editing", slug: "video-editing",
+    title: "Video Editing for Content Creators",
+    description: "Learn video editing from scratch using free tools like DaVinci Resolve. Create YouTube videos, Reels, TikToks and professional content. Covers cuts, transitions, colour grading, subtitles and exports.",
+    category: "creative",
+    thumbnail: "https://img.youtube.com/vi/ySLdNu9xk_0/maxresdefault.jpg",
+    duration_min: 90, total_modules: 6, is_free: true,
+    modules: [
+      { id:"ve1", position:1, title:"DaVinci Resolve Setup & Interface",     youtube_id:"ySLdNu9xk_0", duration_min:15 },
+      { id:"ve2", position:2, title:"Importing & Organising Footage",        youtube_id:"63Ln33O4p4c", duration_min:14 },
+      { id:"ve3", position:3, title:"Cuts, Transitions & Timing",            youtube_id:"TG1HrloKLEg", duration_min:16 },
+      { id:"ve4", position:4, title:"Colour Grading Basics",                 youtube_id:"KnT4HzajcQk", duration_min:15 },
+      { id:"ve5", position:5, title:"Adding Subtitles & Text",               youtube_id:"iim7mMU30_g", duration_min:14 },
+      { id:"ve6", position:6, title:"Export for YouTube, Reels & TikTok",    youtube_id:"WlGLX5lKAcc", duration_min:16 },
+    ],
+  },
+
 ];
+
 
 export async function GET(req: NextRequest) {
   const category = req.nextUrl.searchParams.get("category") ?? "";
